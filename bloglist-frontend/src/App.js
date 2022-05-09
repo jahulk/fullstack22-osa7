@@ -1,16 +1,21 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import { initializeBlogs } from './reducers/blogReducer'
-import { initializeUsers, logoutUser, setUser } from './reducers/userReducer'
+import { initializeUsers, setUser } from './reducers/userReducer'
 import LoginForm from './components/LoginForm'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import BlogList from './components/BlogList'
+import UserList from './components/UserList'
+import User from './components/User'
+import Blog from './components/Blog'
+import Menu from './components/Menu'
 
 const App = () => {
   const dispatch = useDispatch()
-  const currentUser = useSelector((state) => state.users.currentUser)
+  const users = useSelector((state) => state.users)
   const blogs = useSelector((state) => state.blogs)
 
   useEffect(() => {
@@ -28,7 +33,7 @@ const App = () => {
 
   const blogFormRef = useRef()
 
-  if (!currentUser) {
+  if (!users.currentUser) {
     return (
       <div>
         <Notification />
@@ -38,22 +43,42 @@ const App = () => {
   }
 
   return (
-    <div>
-      <Notification />
-      <h2>blogs</h2>
-      <p>
-        {currentUser.username} logged in{' '}
-        <button onClick={() => dispatch(logoutUser())}>logout</button>
-      </p>
-      <Togglable buttonLabel="new blog" ref={blogFormRef}>
-        <BlogForm />
-      </Togglable>
-      {[...blogs]
-        .sort((a, b) => b.likes - a.likes)
-        .map((blog) => (
-          <Blog key={blog.id} blog={blog} currentUser={currentUser} />
-        ))}
-    </div>
+    <Router>
+      <div>
+        <Notification />
+        <Menu currentUser={users.currentUser} />
+        <Routes>
+          <Route path="/users/:id" element={<User users={users.users} />} />
+          <Route path="/users" element={<UserList users={users.users} />} />
+          <Route
+            path="/blogs/:id"
+            element={<Blog blogs={blogs} currentUser={users.currentUser} />}
+          />
+          <Route
+            path="/"
+            element={
+              <>
+                <Togglable buttonLabel="new blog" ref={blogFormRef}>
+                  <BlogForm />
+                </Togglable>
+                <BlogList blogs={blogs} />
+              </>
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <>
+                <Togglable buttonLabel="new blog" ref={blogFormRef}>
+                  <BlogForm />
+                </Togglable>
+                <BlogList blogs={blogs} />
+              </>
+            }
+          />
+        </Routes>
+      </div>
+    </Router>
   )
 }
 

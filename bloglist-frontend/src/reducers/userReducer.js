@@ -51,7 +51,6 @@ export const loginUser = (credentials) => {
       const user = await loginService.login({
         ...credentials,
       })
-      blogService.setToken(user.token)
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       blogService.setToken(user.token)
       dispatch(setCurrentUser(user))
@@ -65,7 +64,7 @@ export const logoutUser = () => {
   return async (dispatch) => {
     blogService.setToken(null)
     window.localStorage.removeItem('loggedBlogappUser')
-    dispatch(removeCurrentUser)
+    dispatch(removeCurrentUser())
   }
 }
 

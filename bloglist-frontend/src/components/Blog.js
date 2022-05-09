@@ -1,48 +1,39 @@
-import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { deleteBlog, likeBlog } from '../reducers/blogReducer'
+import { useParams, useNavigate } from 'react-router-dom'
 
-const Blog = ({ blog, currentUser }) => {
-  const [visible, setVisible] = useState(false)
+const Blog = ({ blogs, currentUser }) => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const id = useParams().id
+  const blog = blogs.find((b) => b.id === id)
 
   const handleDelete = (blog) => {
     if (window.confirm(`remove ${blog.title} by ${blog.author}`)) {
       dispatch(deleteBlog(blog))
+      navigate('/')
     }
   }
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-  }
 
-  if (!visible) {
-    return (
-      <div style={blogStyle}>
-        <p>
-          {blog.title} {blog.author}{' '}
-          <button onClick={() => setVisible(true)}>view</button>
-        </p>
-      </div>
-    )
+  if (!blog) {
+    return null
   }
 
   return (
-    <div style={blogStyle}>
-      <p>
+    <div>
+      <h1>
         {blog.title} {blog.author}{' '}
-        <button onClick={() => setVisible(false)}>hide</button>
-      </p>
+      </h1>
       <p>{blog.url}</p>
       <p className="bloglikes">
-        {blog.likes}{' '}
+        {blog.likes} likes
         <button onClick={() => dispatch(likeBlog(blog))}>like</button>
       </p>
       {blog.user && blog.user.username === currentUser.username && (
-        <button onClick={() => handleDelete(blog)}>remove</button>
+        <p>
+          added by {blog.user.username}
+          <button onClick={() => handleDelete(blog)}>remove</button>
+        </p>
       )}
     </div>
   )
