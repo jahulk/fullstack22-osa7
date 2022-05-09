@@ -33,7 +33,7 @@ const notificationSlice = createSlice({
 export const { setMessage, removeMessage, setTimeId, resetPreviousTimeout } =
   notificationSlice.actions
 
-export const setNotification = (content, type, time) => {
+export const setNotification = (type, content, time) => {
   return async (dispatch) => {
     dispatch(resetPreviousTimeout())
     dispatch(setMessage({ content, type }))

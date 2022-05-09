@@ -12,10 +12,19 @@ const blogSlice = createSlice({
     appendBlog(state, action) {
       state.push(action.payload)
     },
+    updateBlogs(state, action) {
+      const blog = action.payload
+      return state.map((b) => (b.id === blog.id ? blog : b))
+    },
+    removeBlog(state, action) {
+      const blog = action.payload
+      return state.filter((b) => b.id !== blog.id)
+    },
   },
 })
 
-export const { setBlogs, appendBlog } = blogSlice.actions
+export const { setBlogs, appendBlog, updateBlogs, removeBlog } =
+  blogSlice.actions
 
 export const initializeBlogs = () => {
   return async (dispatch) => {
@@ -36,9 +45,40 @@ export const createBlog = (title, author, url) => {
       dispatch(
         setNotification(
           'message',
-          `a new blog ${newBlog.title} by ${newBlog.author} added`
+          `a new blog ${newBlog.title} by ${newBlog.author} added`,
+          3
         )
       )
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+
+export const likeBlog = (blog) => {
+  return async (dispatch) => {
+    try {
+      const blogObject = {
+        author: blog.author,
+        title: blog.title,
+        url: blog.url,
+        likes: blog.likes + 1,
+        user: blog.user ? blog.user.id : null,
+      }
+      const updatedBlog = await blogService.update(blog.id, blogObject)
+      dispatch(updateBlogs(updatedBlog))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+
+export const deleteBlog = (blog) => {
+  return async (dispatch) => {
+    try {
+      await blogService.remove(blog.id)
+      dispatch(removeBlog(blog))
+      dispatch(setNotification('message', 'blog removed', 3))
     } catch (error) {
       console.log(error)
     }
