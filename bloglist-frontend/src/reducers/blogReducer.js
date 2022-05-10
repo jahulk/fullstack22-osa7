@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import axios from 'axios'
 import blogService from '../services/blogs'
 import { setNotification } from './notificationReducer'
 
@@ -79,6 +80,19 @@ export const deleteBlog = (blog) => {
       await blogService.remove(blog.id)
       dispatch(removeBlog(blog))
       dispatch(setNotification('message', 'blog removed', 3))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+
+export const commentBlog = (blog, comment) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.post(`/api/blogs/${blog.id}/comments`, {
+        comment,
+      })
+      dispatch(updateBlogs(response.data))
     } catch (error) {
       console.log(error)
     }

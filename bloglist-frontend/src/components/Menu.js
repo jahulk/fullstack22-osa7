@@ -22,15 +22,20 @@ const Menu = ({ currentUser }) => {
   }
 
   return (
-    <div style={divStyle}>
-      <Link style={padding} to="/">
-        blogs
-      </Link>
-      <Link style={padding} to="/users">
-        users
-      </Link>
-      <span>{currentUser.username} logged in </span>
-      <button onClick={() => dispatch(logoutUser())}>logout</button>
+    <div>
+      <div style={divStyle}>
+        <Link style={padding} to="/">
+          blogs
+        </Link>
+        <Link style={padding} to="/users">
+          users
+        </Link>
+        <span>{currentUser.username} logged in </span>
+        <button onClick={() => dispatch(logoutUser())}>logout</button>
+      </div>
+      <div>
+        <h1>blog app</h1>
+      </div>
     </div>
   )
 }

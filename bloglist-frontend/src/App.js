@@ -47,36 +47,38 @@ const App = () => {
       <div>
         <Notification />
         <Menu currentUser={users.currentUser} />
-        <Routes>
-          <Route path="/users/:id" element={<User users={users.users} />} />
-          <Route path="/users" element={<UserList users={users.users} />} />
-          <Route
-            path="/blogs/:id"
-            element={<Blog blogs={blogs} currentUser={users.currentUser} />}
-          />
-          <Route
-            path="/"
-            element={
-              <>
-                <Togglable buttonLabel="new blog" ref={blogFormRef}>
-                  <BlogForm />
-                </Togglable>
-                <BlogList blogs={blogs} />
-              </>
-            }
-          />
-          <Route
-            path="/"
-            element={
-              <>
-                <Togglable buttonLabel="new blog" ref={blogFormRef}>
-                  <BlogForm />
-                </Togglable>
-                <BlogList blogs={blogs} />
-              </>
-            }
-          />
-        </Routes>
+        <div>
+          <Routes>
+            <Route path="/users/:id" element={<User users={users.users} />} />
+            <Route path="/users" element={<UserList users={users.users} />} />
+            <Route
+              path="/blogs/:id"
+              element={<Blog blogs={blogs} currentUser={users.currentUser} />}
+            />
+            <Route
+              path="/"
+              element={
+                <>
+                  <Togglable buttonLabel="new blog" ref={blogFormRef}>
+                    <BlogForm />
+                  </Togglable>
+                  <BlogList blogs={blogs} />
+                </>
+              }
+            />
+            <Route
+              path="/"
+              element={
+                <>
+                  <Togglable buttonLabel="new blog" ref={blogFormRef}>
+                    <BlogForm />
+                  </Togglable>
+                  <BlogList blogs={blogs} />
+                </>
+              }
+            />
+          </Routes>
+        </div>
       </div>
     </Router>
   )

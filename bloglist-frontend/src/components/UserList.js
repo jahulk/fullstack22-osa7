@@ -4,7 +4,7 @@ const UserList = (props) => {
   const { users } = props
   return (
     <div>
-      <h1>users</h1>
+      <h2>users</h2>
       <table>
         <thead>
           <tr>
